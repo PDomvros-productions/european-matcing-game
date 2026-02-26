@@ -12,24 +12,66 @@
         --dark-bg: #01012b;
     }
     
-    body {
+    html, body {
+        height: 100%;
         margin: 0;
+        padding: 0;
         overflow: hidden;
+        background-color: transparent;
+    }
+
+    body {
+        /* Base background color gradient */
         background: radial-gradient(circle at center, #1b1b4b 0%, var(--dark-bg) 100%);
         font-family: 'M PLUS Rounded 1c', sans-serif;
         color: #fff;
         touch-action: none; 
+        position: relative; 
+        width: 100%;
+        height: 100%;
     }
 
-    body::before {
+    /* Full-page container for the background image */
+    .background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('euromap.jpg');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.55;
+        z-index: -1; 
+        pointer-events: none;
+    }
+
+    /* Pseudo-element for the grid pattern, applied to background-container */
+    .background-container::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         background-image: 
-            linear-gradient(rgba(5, 217, 232, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(5, 217, 232, 0.15) 1px, transparent 1px);
+            linear-gradient(rgba(5, 217, 232, 0.15) 1px, transparent 1px), 
+            linear-gradient(90deg, rgba(5, 217, 232, 0.15) 1px, transparent 1px); 
         background-size: 40px 40px;
-        z-index: -1;
+        background-repeat: repeat;
+        pointer-events: none;
+    }
+
+    /* Background overlay to ensure game readability - placed behind the map */
+    .background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(1, 1, 43, 0.2) 0%, rgba(1, 1, 43, 0.5) 100%);
+        z-index: -2; 
+        pointer-events: none;
     }
 
     #ui-layer {
@@ -51,7 +93,7 @@
         text-shadow: 0 0 5px var(--neon-cyan);
     }
 
-    /* Bubbles have been made much smaller to clear up screen space */
+    /* Bubbles */
     .bubble {
         position: absolute;
         padding: clamp(4px, 1vw, 8px) clamp(8px, 1.5vw, 15px);
@@ -92,10 +134,16 @@
         box-shadow: 0 0 10px var(--neon-cyan);
     }
     
+    /* Overlay screens */
     .overlay {
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(1, 1, 43, 0.95);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(1, 1, 43, 0.6); 
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px); 
         display: flex;
         justify-content: center;
         align-items: center;
@@ -106,19 +154,26 @@
         box-sizing: border-box;
     }
 
+    /* Targeted override for the Start Screen - far more transparent */
+    #start-screen.overlay {
+        background: rgba(1, 1, 43, 0.1); 
+        backdrop-filter: blur(2px);     
+        -webkit-backdrop-filter: blur(2px);
+    }
+
     .title-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 20px;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         flex-wrap: wrap; 
     }
 
     .background-logo {
         height: clamp(80px, 12vw, 180px);
-        opacity: 0.6; 
-        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5)); 
+        opacity: 1; /* Fully opaque now */
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); /* Stronger white glow to stand out */
         user-select: none;
     }
 
@@ -129,6 +184,17 @@
         text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
         text-transform: uppercase;
         letter-spacing: 2px;
+    }
+
+    .subtitle {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+        color: #fff;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 800;
     }
 
     .instruction {
@@ -190,7 +256,6 @@
 
     #end-screen { display: none; }
 
-    /* Footer z-index increased to 1000 so it sits over the overlays */
     footer {
         position: fixed;
         bottom: 10px;
@@ -201,18 +266,22 @@
         z-index: 1000; 
         pointer-events: none;
         font-weight: 800;
-        text-shadow: 0 0 5px rgba(0,0,0,0.8); /* Ensures it can be read over game elements */
+        text-shadow: 0 0 5px rgba(0,0,0,0.8); 
     }
 </style>
 </head>
 <body>
+    <div class="background-overlay"></div>
+    <div class="background-container"></div>
     <div id="start-screen" class="overlay">
         <div class="title-wrapper">
             <img src="logo.png" alt="PyleaMUN Logo" class="background-logo">
             <h1 class="anime-title">European Nations<br>Matching Game</h1>
         </div>
+        
+        <p class="subtitle">A PyleaMUN 2027 Production</p>
 
-        A PyleaMUN 2027 Production<p class="instruction">Match the European country to its nickname</p>
+        <p class="instruction">Match the European country to its nickname</p>
         
         <div class="time-toggle-container">
             <button class="time-btn active" data-time="60">60s</button>
