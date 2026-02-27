@@ -172,8 +172,8 @@
 
     .background-logo {
         height: clamp(80px, 12vw, 180px);
-        opacity: 1; /* Fully opaque now */
-        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); /* Stronger white glow to stand out */
+        opacity: 1; 
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)); 
         user-select: none;
     }
 
@@ -284,17 +284,16 @@
         <p class="instruction">Match the European country to its nickname</p>
         
         <div class="time-toggle-container">
-            <button class="time-btn active" data-time="60">60s</button>
-            <button class="time-btn" data-time="90">90s</button>
-            <button class="time-btn" data-time="120">120s</button>
-            <button class="time-btn" data-time="180">180s</button>
+            <button class="time-btn active" data-time="180">3 mins</button>
+            <button class="time-btn" data-time="240">4 mins</button>
+            <button class="time-btn" data-time="300">5 mins</button>
         </div>
 
         <button class="action-btn" onclick="startGame()">Start Game</button>
     </div>
 
     <div id="ui-layer">
-        <div id="timer">Time: 60</div>
+        <div id="timer">Time: 180</div>
     </div>
     
     <div id="game-board"></div>
@@ -341,7 +340,8 @@
         const board = document.getElementById('game-board');
         let bubbles = [];
         let firstSelection = null;
-        let selectedTime = 60;
+        // Updated default starting time
+        let selectedTime = 180;
         let timeRemaining = 0;
         let gameActive = false;
         let matchesFound = 0;
